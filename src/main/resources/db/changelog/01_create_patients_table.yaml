@@ -1,0 +1,25 @@
+databaseChangeLog:
+  - changeSet:
+      id: 01_create_patients_table
+      author: Txao
+      changes:
+        - createTable:
+            tableName: patients
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                    foreignKeyName: patients_pk
+              - column:
+                  name: code
+                  type: VARCHAR(32)
+              - column:
+                  name: name
+                  type: VARCHAR(64)
+              - column:
+                  name: disease
+                  type: VARCHAR(128)
