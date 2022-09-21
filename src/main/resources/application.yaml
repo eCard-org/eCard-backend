@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
+    url: ${URL}
     driver-class-name: org.postgresql.Driver
-    username: postgres
-    password: qwerty
+    username: ${USERNAME}
+    password: ${PASSWORD}
   liquibase:
     change-log: classpath:/db/changelog-master.yaml

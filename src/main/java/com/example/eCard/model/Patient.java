@@ -1,4 +1,4 @@
-package com.example.eCard.domain;
+package com.example.eCard.model;
 
 import lombok.Data;
 import org.springframework.data.annotation.Id;

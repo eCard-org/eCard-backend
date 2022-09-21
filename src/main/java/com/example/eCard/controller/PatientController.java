@@ -1,6 +1,6 @@
 package com.example.eCard.controller;
 
-import com.example.eCard.domain.Patient;
+import com.example.eCard.model.Patient;
 import com.example.eCard.service.PatientService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -20,18 +20,18 @@ public class PatientController {
     }
 
     @GetMapping("/{code}")
-    public Patient getByCode(@PathVariable String code) {
+    public Patient getByCode(@PathVariable Long code) {
         return service.getByCode(code);
     }
 
-    @PostMapping
+    @PutMapping
     public Patient save(@RequestBody Patient patient) {
         return service.save(patient);
     }
 
-    @PatchMapping
-    public Patient update(@RequestBody Patient patient) {
-        return service.update(patient);
+    @PatchMapping("/{id}")
+    public Patient update(@PathVariable Long id, @RequestBody Patient patient) {
+        return service.update(id, patient);
     }
 
     @DeleteMapping("/{id}")

@@ -1,12 +1,11 @@
 package com.example.eCard.service;
 
-import com.example.eCard.domain.Patient;
+import com.example.eCard.model.Patient;
 import com.example.eCard.exception.BusinessException;
 import com.example.eCard.repository.PatientRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,48 +15,44 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class PatientService {
 
+    private static final String PATIENT_NOT_FOUND_MESSAGE = "Пациент с кодом %d не найден";
+
     private final PatientRepository repository;
 
     public List<Patient> getAll() {
-        log.info("[TECH] [Info] Getting all patients");
+        log.info("[Tech] [INFO] Getting all patients");
         return repository.findAll();
     }
 
-    public Patient getByCode(String code) {
+    public Patient getByCode(Long code) {
         Optional<Patient> optionalPatient = repository.findByCode(code);
 
         if (optionalPatient.isPresent()) {
-            log.info("[TECH] [Info] Getting one patient by code: " + code);
+            log.info("[Tech] [INFO] Getting one patient by code: " + code);
             return optionalPatient.get();
         }
 
         throw new BusinessException("Пациент с таким кодом не найден. Код: " + code);
     }
 
-    @Transactional
     public Patient save(Patient patient) {
-        if (repository.findById(patient.getId()).isPresent()) {
-            return update(patient);
-        }
+        if (repository.findById(patient.getId()).isPresent()) return update(patient.getId(), patient);
 
-        log.info("[TECH] [Info] Saving patient");
+        log.info("[Tech] [INFO] Saving patient");
         return repository.save(patient);
     }
 
-    @Transactional
-    public Patient update(Patient patient) {
-        Optional<Patient> optionalPatient = repository.findById(patient.getId());
+    public Patient update(Long id, Patient patient) {
+        Optional<Patient> optionalPatient = repository.findById(id);
 
-        if (optionalPatient.isPresent()) {
-            optionalPatient.get().setCode(patient.getCode());
-            optionalPatient.get().setName(patient.getName());
-            optionalPatient.get().setDisease(patient.getDisease());
+        if (optionalPatient.isEmpty()) throw new BusinessException(String.format(PATIENT_NOT_FOUND_MESSAGE, id));
 
-            log.info("[TECH] [Info] Updating patient");
-            return repository.save(optionalPatient.get());
-        }
+        optionalPatient.get().setCode(patient.getCode());
+        optionalPatient.get().setName(patient.getName());
+        optionalPatient.get().setDisease(patient.getDisease());
 
-        throw new BusinessException("Пациент с id: " + patient.getId() + " не найден");
+        log.info("[Tech] [INFO] Updating patient");
+        return repository.save(optionalPatient.get());
     }
 
     public void delete(Long id) {
