@@ -16,7 +16,7 @@ databaseChangeLog:
                     foreignKeyName: patients_pk
               - column:
                   name: code
-                  type: VARCHAR(32)
+                  type: BIGINT
               - column:
                   name: name
                   type: VARCHAR(64)

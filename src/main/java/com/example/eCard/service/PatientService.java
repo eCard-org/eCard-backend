@@ -1,7 +1,7 @@
 package com.example.eCard.service;
 
-import com.example.eCard.model.Patient;
 import com.example.eCard.exception.BusinessException;
+import com.example.eCard.model.Patient;
 import com.example.eCard.repository.PatientRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +36,9 @@ public class PatientService {
     }
 
     public Patient save(Patient patient) {
-        if (repository.findById(patient.getId()).isPresent()) return update(patient.getId(), patient);
+        if (patient.getId() != null) {
+            return update(patient.getId(), patient);
+        }
 
         log.info("[Tech] [INFO] Saving patient");
         return repository.save(patient);
